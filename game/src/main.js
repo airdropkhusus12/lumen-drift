@@ -48,7 +48,10 @@ function saveBest(value) {
 
 function runShot(name) {
   const scene = stageShot(name, world, rng);
-  let painted = 0;
+  // Paint once synchronously so the frame exists even if the embedder captures
+  // before the next animation frame, then paint once more via rAF.
+  renderer.draw(world.state, scene.screen, scene.best, audio.muted);
+  let painted = 1;
   function paint() {
     renderer.draw(world.state, scene.screen, scene.best, audio.muted);
     painted += 1;
